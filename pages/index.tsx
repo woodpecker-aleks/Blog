@@ -1,20 +1,16 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import Link from 'next/link'
-import { startClock } from '../actions'
+import Navigation from '../components/Navigation'
+import Container from '../components/Container'
+import { H1 } from '../components/Typography'
+import Main from '../components/Main'
 
 const Index = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(startClock())
-  }, [dispatch])
-
   return (
-    <>
-      <Link href="/show-redux-state">
-        <a>Click to see current Redux State</a>
-      </Link>
-    </>
+    <Container>
+      <Navigation />
+      <Main>
+        <H1 as="h1">Welcome to my blog!</H1>
+      </Main>
+    </Container>
   )
 }
 
