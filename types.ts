@@ -1,4 +1,14 @@
-export const TICK = 'TICK'
-export const INCREMENT = 'INCREMENT'
-export const DECREMENT = 'DECREMENT'
-export const RESET = 'RESET'
+export type fetchStatus = 'pending' | 'idle' | 'fulfilled' | 'rejected'
+
+export interface comment {
+  id: number
+  postId: number
+  body: string
+}
+
+export interface todo {
+  id: number
+  title: string
+  body: string
+  comments?: comment[]
+}
