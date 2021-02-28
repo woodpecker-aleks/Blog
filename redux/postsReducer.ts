@@ -1,23 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { PENDING, FULFILLED, IDLE, REJECTED } from '../constants'
-import path from '../path'
-import { fetchStatus, todo } from '../types'
+import { PENDING, FULFILLED, IDLE, REJECTED } from '@utils/constants'
+import path from '@utils/path'
+import { fetchStatus, Post } from '@utils/types'
 
 interface initialStateProps {
   fetchStatus: fetchStatus
-  posts: todo[]
+  posts: Post[]
 }
 
-const initialState = {
+const initialState: initialStateProps = {
   fetchStatus: IDLE,
   posts: [],
-} as initialStateProps
+}
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const res = await axios.get(path.api.posts.all)
+  const res = await axios.get(path.api.posts)
 
-  const fetchedPosts: todo[] = res.data
+  const fetchedPosts: Post[] = res.data
 
   return fetchedPosts
 })

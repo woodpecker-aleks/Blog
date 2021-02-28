@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { FC, memo } from 'react'
-import path from '../path'
+import path from '@utils/path'
 import styled from 'styled-components'
-import { A } from './Typography'
+import { A } from '@components/Typography'
 
 const NavList = styled.ul`
   display: flex;

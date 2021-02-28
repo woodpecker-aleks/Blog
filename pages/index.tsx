@@ -1,7 +1,7 @@
-import Navigation from '../components/Navigation'
-import Container from '../components/Container'
-import { H1 } from '../components/Typography'
-import Main from '../components/Main'
+import Navigation from '@components/Navigation'
+import Container from '@components/Container'
+import { H1 } from '@components/Typography'
+import Main from '@components/Main'
 
 const Index = () => {
   return (
