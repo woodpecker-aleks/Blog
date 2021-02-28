@@ -12,3 +12,8 @@ export interface Post {
   body: string
   comments?: Comment[]
 }
+
+export interface PostInfo {
+  title: string
+  body: string
+}

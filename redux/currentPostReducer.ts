@@ -24,21 +24,35 @@ export const fetchCurrentPost = createAsyncThunk('currentPost/fetchPost', async 
   return fetchedCurrentPost
 })
 
+export const updateCurrentPost = createAsyncThunk('currentPost/updatePost', async (newPostInfo: Post) => {
+  const { id, ...restNewPostInfo } = newPostInfo
+
+  const res = await axios.put(path.api.post(id), restNewPostInfo)
+
+  const updatedPost: Post = res.data
+
+  return updatedPost
+})
+
+export const deleteCurrentPost = createAsyncThunk('currentPost/deletePost', async (postId: number) => {
+  await axios.delete(path.api.post(postId))
+})
+
 const currentPostSlice = createSlice({
   name: 'currentPost',
   initialState,
 
   reducers: {
-    toggleEditorMode(state, action) {
+    toggleEditorMode(state) {
       state.editorMode = !state.editorMode
     },
   },
 
   extraReducers: {
     [fetchCurrentPost.fulfilled as any]: (state, action) => {
-      const fetchedPosts: Post = action.payload
+      const fetchedPost: Post = action.payload
 
-      state.post = fetchedPosts
+      state.post = fetchedPost
 
       state.fetchStatus = FULFILLED
     },
@@ -47,6 +61,24 @@ const currentPostSlice = createSlice({
     },
     [fetchCurrentPost.rejected as any]: (state, action) => {
       state.fetchStatus = REJECTED
+    },
+
+    [updateCurrentPost.fulfilled as any]: (state, action) => {
+      const updatedPost: Post = action.payload
+
+      state.post = updatedPost
+
+      state.fetchStatus = FULFILLED
+    },
+    [updateCurrentPost.pending as any]: (state, action) => {
+      state.fetchStatus = PENDING
+    },
+    [updateCurrentPost.rejected as any]: (state, action) => {
+      state.fetchStatus = REJECTED
+    },
+
+    [deleteCurrentPost.fulfilled as any]: (state, action) => {
+      state.post = { id: 0, title: '', body: '' }
     },
   },
 })

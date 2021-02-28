@@ -1,62 +1,34 @@
 import Navigation from '@components/Navigation'
 import Container from '@components/Container'
-import styled from 'styled-components'
-import Paper from '@components/Paper'
 import { NextPage, NextPageContext } from 'next'
-import { H2, Typography } from '@components/Typography'
-import Divider from '@components/Divider'
 import { initializeStore } from '@redux/store'
-import { currentPostSliceSelector, fetchCurrentPost } from '@redux/currentPostReducer'
-import { useSelector, useDispatch } from 'react-redux'
-import Button from '@components/Button'
+import { fetchCurrentPost, currentPostSliceSelector } from '@redux/currentPostReducer'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/dist/client/router'
 import { useLayoutEffect } from 'react'
 import Head from 'next/head'
-import { PENDING } from '@utils/constants'
-import Progress from '@components/Progress'
-
-const PostBody = styled(Paper)`
-  flex-direction: column;
-  align-items: flex-start;
-  margin-block: ${({ theme }) => theme.spacing}px;
-`
-
-const PostTitle = styled(H2)`
-  padding-inline: ${({ theme }) => theme.spacing}px;
-`
-
-const PostDescription = styled(Typography)`
-  padding-inline: ${({ theme }) => theme.spacing}px;
-  margin-bottom: ${({ theme }) => theme.spacing * 2}px;
-`
-
-const EditPostButton = styled(Button)`
-  margin-block: ${({ theme }) => theme.spacing}px;
-  margin-right: ${({ theme }) => theme.spacing}px;
-`
-
-const PostProgress = styled(Progress)`
-  margin-top: ${({ theme }) => theme.spacing * 5}px;
-  margin-inline: auto;
-`
+import { PENDING, REJECTED } from '@utils/constants'
+import PostInfo from '@components/PostInfo'
 
 interface PostPageProps {
-  serverRender: boolean
-  error: boolean
+  readonly serverRender: boolean
+  readonly error: boolean
 }
 
-const PostPage: NextPage<PostPageProps> = ({ serverRender }) => {
-  const { post, fetchStatus } = useSelector(currentPostSliceSelector)
+const PostPage: NextPage<PostPageProps> = ({ serverRender, error }) => {
+  const router = useRouter()
+
+  const { post, fetchStatus, editorMode } = useSelector(currentPostSliceSelector)
 
   const dispatch = useDispatch()
 
-  const router = useRouter()
-
-  const postId = Number(router.query.id)
-
   useLayoutEffect(() => {
+    const postId = Number(router.query.id)
+
+    if (error) router.push('/not-found')
+
     if (!serverRender) dispatch(fetchCurrentPost(postId))
-  }, [serverRender])
+  }, [serverRender, error, router.query.id])
 
   return (
     <>
@@ -65,17 +37,7 @@ const PostPage: NextPage<PostPageProps> = ({ serverRender }) => {
       </Head>
       <Container>
         <Navigation />
-        {fetchStatus === PENDING ? (
-          <PostProgress />
-        ) : (
-          <PostBody>
-            <PostTitle>{post.title}</PostTitle>
-            <Divider variant="horizontal" />
-            <PostDescription>{post.body}</PostDescription>
-            <Divider variant="horizontal" />
-            <EditPostButton>Edit</EditPostButton>
-          </PostBody>
-        )}
+        <PostInfo loading={fetchStatus === PENDING} post={post} editorMode={editorMode} />
       </Container>
     </>
   )
@@ -91,11 +53,14 @@ PostPage.getInitialProps = async ({ query, req }: PostPageContext) => {
   const store = initializeStore()
   const postId = Number(query.id)
   let serverRender = true
+  let error = false
 
   if (req) await store.dispatch(fetchCurrentPost(postId))
   else serverRender = false
 
-  return { initialReduxState: store.getState(), serverRender }
+  if (store.getState().currentPost.fetchStatus === REJECTED) error = true
+
+  return { initialReduxState: store.getState(), serverRender, error }
 }
 
 export default PostPage
