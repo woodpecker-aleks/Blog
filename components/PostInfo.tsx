@@ -9,6 +9,8 @@ import Divider from '@components/Divider'
 import Progress from '@components/Progress'
 import { deleteCurrentPost, toggleEditorMode, updateCurrentPost } from '@redux/currentPostReducer'
 import { Post } from '@utils/types'
+import { useRouter } from 'next/dist/client/router'
+import path from '@utils/path'
 
 const PostBody = styled(Paper)`
   flex-direction: column;
@@ -63,6 +65,8 @@ interface PostInfoProps {
 const PostInfo: FC<PostInfoProps> = ({ loading, post, editorMode }) => {
   const dispatch = useDispatch()
 
+  const router = useRouter()
+
   const [values, setValues] = useState({
     title: post.title,
     body: post.body,
@@ -74,8 +78,10 @@ const PostInfo: FC<PostInfoProps> = ({ loading, post, editorMode }) => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }))
   }, [])
 
-  const handleDispatchDeleteCurrentPost = useCallback(() => {
-    dispatch(deleteCurrentPost(post.id))
+  const handleDispatchDeleteCurrentPost = useCallback(async () => {
+    await dispatch(deleteCurrentPost(post.id))
+
+    router.push(path.page.posts)
   }, [dispatch, post.id])
 
   const handleDispatchToggleEditorMode = useCallback(() => {
@@ -104,7 +110,10 @@ const PostInfo: FC<PostInfoProps> = ({ loading, post, editorMode }) => {
         )}
         <Divider variant="horizontal" />
         <PostActionBar>
-          <EditPostButton onClick={editorMode ? handleDispatchUpdateCurrentPost : handleDispatchToggleEditorMode}>
+          <EditPostButton
+            disabled={!values.title}
+            onClick={editorMode ? handleDispatchUpdateCurrentPost : handleDispatchToggleEditorMode}
+          >
             {editorMode ? 'Save' : 'Edit'}
           </EditPostButton>
           <DeletePostButton onClick={handleDispatchDeleteCurrentPost}>Delete</DeletePostButton>

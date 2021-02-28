@@ -75,7 +75,9 @@ const PostCreator: FC = () => {
           value={values.body}
           onChange={handleInputChange}
         />
-        <CreatePostButton onClick={handleDispatchCreatePost}>Create</CreatePostButton>
+        <CreatePostButton disabled={!values.title} onClick={handleDispatchCreatePost}>
+          Create
+        </CreatePostButton>
       </NewPostPagePaper>
     </>
   )

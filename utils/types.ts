@@ -2,7 +2,6 @@ export type fetchStatus = 'pending' | 'idle' | 'fulfilled' | 'rejected'
 
 export interface Comment {
   id: number
-  postId: number
   body: string
 }
 

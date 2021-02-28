@@ -5,11 +5,6 @@ import PostItem from '@components/PostItem'
 import { H5 } from './Typography'
 import Progress from './Progress'
 
-interface PostsListProps {
-  posts: Post[]
-  loading: boolean
-}
-
 const List = styled.ul`
   list-style: none;
   display: flex;
@@ -25,6 +20,11 @@ const PostsProgress = styled(Progress)`
   margin-inline: auto;
   margin-top: ${({ theme }) => theme.spacing * 2}px;
 `
+
+interface PostsListProps {
+  posts: Post[]
+  loading: boolean
+}
 
 const PostsList: FC<PostsListProps> = ({ posts, loading }) => {
   let postsList

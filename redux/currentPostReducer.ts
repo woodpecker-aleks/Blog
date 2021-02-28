@@ -66,7 +66,7 @@ const currentPostSlice = createSlice({
     [updateCurrentPost.fulfilled as any]: (state, action) => {
       const updatedPost: Post = action.payload
 
-      state.post = updatedPost
+      state.post = { ...state.post, ...updatedPost }
 
       state.fetchStatus = FULFILLED
     },

@@ -19,6 +19,10 @@ const Button = styled.button`
   &:hover {
     border-color: ${({ theme }) => theme.backgroundColor};
   }
+
+  &:disabled {
+    opacity: 0.5;
+  }
 `
 
 export default Button

@@ -9,6 +9,7 @@ import { useLayoutEffect } from 'react'
 import Head from 'next/head'
 import { PENDING, REJECTED } from '@utils/constants'
 import PostInfo from '@components/PostInfo'
+import CommentsList from '@components/CommentsList'
 
 interface PostPageProps {
   readonly serverRender: boolean
@@ -38,6 +39,7 @@ const PostPage: NextPage<PostPageProps> = ({ serverRender, error }) => {
       <Container>
         <Navigation />
         <PostInfo loading={fetchStatus === PENDING} post={post} editorMode={editorMode} />
+        <CommentsList comments={post.comments} />
       </Container>
     </>
   )
