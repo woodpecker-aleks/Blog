@@ -22,7 +22,8 @@ interface CommentsListProps {
 const CommentsList: FC<CommentsListProps> = ({ comments }) => {
   let commentsList
 
-  if (comments.length) commentsList = comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)
+  if (comments && comments.length)
+    commentsList = comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)
   else
     commentsList = (
       <NoCommentsTitle transform="uppercase" as="h5">

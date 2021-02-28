@@ -10,6 +10,7 @@ import Head from 'next/head'
 import { PENDING, REJECTED } from '@utils/constants'
 import PostInfo from '@components/PostInfo'
 import CommentsList from '@components/CommentsList'
+import CommentCreator from '@components/CommentCreator'
 
 interface PostPageProps {
   readonly serverRender: boolean
@@ -39,6 +40,7 @@ const PostPage: NextPage<PostPageProps> = ({ serverRender, error }) => {
       <Container>
         <Navigation />
         <PostInfo loading={fetchStatus === PENDING} post={post} editorMode={editorMode} />
+        <CommentCreator postId={post.id} />
         <CommentsList comments={post.comments} />
       </Container>
     </>

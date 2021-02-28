@@ -8,6 +8,7 @@ import { NextPage } from 'next'
 import { PENDING } from '@utils/constants'
 import { useLayoutEffect } from 'react'
 import Head from 'next/head'
+import { H2 } from '@components/Typography'
 
 interface PostsPageProps {
   serverRender: boolean
@@ -29,6 +30,7 @@ const PostsPage: NextPage<PostsPageProps> = ({ serverRender }) => {
       </Head>
       <Container>
         <Navigation />
+        <H2>Posts</H2>
         <PostsList posts={posts} loading={fetchStatus === PENDING} />
       </Container>
     </>

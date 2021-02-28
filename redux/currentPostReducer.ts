@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { PENDING, FULFILLED, IDLE, REJECTED } from '@utils/constants'
 import path from '@utils/path'
-import { fetchStatus, Post } from '@utils/types'
+import { Comment, fetchStatus, Post } from '@utils/types'
 
 export interface initialStateProps {
   fetchStatus: fetchStatus
@@ -37,6 +37,17 @@ export const updateCurrentPost = createAsyncThunk('currentPost/updatePost', asyn
 export const deleteCurrentPost = createAsyncThunk('currentPost/deletePost', async (postId: number) => {
   await axios.delete(path.api.post(postId))
 })
+
+export const createCommentForCurrentPost = createAsyncThunk(
+  'currentPost/createComment',
+  async (commentInfo: { postId: number; body: string }) => {
+    const res = await axios.post(path.api.comments, commentInfo)
+
+    const createdComment: Comment = res.data
+
+    return createdComment
+  },
+)
 
 const currentPostSlice = createSlice({
   name: 'currentPost',
@@ -79,6 +90,12 @@ const currentPostSlice = createSlice({
 
     [deleteCurrentPost.fulfilled as any]: (state, action) => {
       state.post = { id: 0, title: '', body: '' }
+    },
+
+    [createCommentForCurrentPost.fulfilled as any]: (state, action) => {
+      const createdComment: Comment = action.payload
+
+      state.post.comments.push(createdComment)
     },
   },
 })
