@@ -6,17 +6,14 @@ import Divider from './Divider'
 import Button from './Button'
 import Link from 'next/link'
 import path from '@utils/path'
+import Paper from './Paper'
 
 interface PostItemProps {
   post: Post
 }
 
-const Item = styled.li`
-  display: flex;
+const Item = styled(Paper)`
   flex-direction: column;
-  border-radius: ${({ theme }) => theme.borderRadius}px;
-  background-color: ${({ theme }) => theme.secondaryColor};
-  padding: ${({ theme }) => theme.spacing * 2}px;
   margin-bottom: ${({ theme }) => theme.spacing * 2}px;
 `
 
@@ -37,7 +34,7 @@ const PostLink = styled(Button)`
 
 const PostItem: FC<PostItemProps> = ({ post }) => {
   return (
-    <Item>
+    <Item as="li">
       <PostTitle as="h5">{post.title}</PostTitle>
       <Divider variant="horizontal" />
       <PostDescription>{post.body}</PostDescription>

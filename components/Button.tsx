@@ -1,8 +1,12 @@
 import styled from 'styled-components'
 
 const Button = styled.button`
+  display: inline-flex;
   border-radius: ${({ theme }) => theme.borderRadius}px;
   border: none;
+  font-family: ${({ theme }) => theme.fontFamily};
+  font-weight: 500;
+  text-transform: uppercase;
   cursor: pointer;
   user-select: none;
   background-color: ${({ theme }) => theme.primaryColor};

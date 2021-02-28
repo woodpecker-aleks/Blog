@@ -28,7 +28,7 @@ const postsSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchPosts.fulfilled as any]: (state, action) => {
-      const fetchedPosts = action.payload
+      const fetchedPosts: Post[] = action.payload
 
       state.posts = fetchedPosts
 

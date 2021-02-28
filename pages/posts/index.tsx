@@ -1,27 +1,48 @@
 import Navigation from '@components/Navigation'
 import Container from '@components/Container'
 import { fetchPosts, postsSliceSelector } from '@redux/postsReducer'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import PostsList from '@components/PostsList'
 import { initializeStore } from '@redux/store'
+import { NextPage } from 'next'
+import { PENDING } from '@utils/constants'
+import { useLayoutEffect } from 'react'
+import Head from 'next/head'
 
-const Posts = () => {
-  const { posts } = useSelector(postsSliceSelector)
+interface PostsPageProps {
+  serverRender: boolean
+}
+
+const PostsPage: NextPage<PostsPageProps> = ({ serverRender }) => {
+  const { posts, fetchStatus } = useSelector(postsSliceSelector)
+
+  const dispatch = useDispatch()
+
+  useLayoutEffect(() => {
+    if (!serverRender) dispatch(fetchPosts())
+  }, [serverRender])
 
   return (
-    <Container>
-      <Navigation />
-      <PostsList posts={posts} />
-    </Container>
+    <>
+      <Head>
+        <title>Posts page</title>
+      </Head>
+      <Container>
+        <Navigation />
+        <PostsList posts={posts} loading={fetchStatus === PENDING} />
+      </Container>
+    </>
   )
 }
 
-Posts.getInitialProps = async () => {
+PostsPage.getInitialProps = async ({ req }) => {
   const store = initializeStore()
+  let serverRender = true
 
-  await store.dispatch(fetchPosts())
+  if (req) await store.dispatch(fetchPosts())
+  else serverRender = false
 
-  return { initialReduxState: store.getState() }
+  return { initialReduxState: store.getState(), serverRender }
 }
 
-export default Posts
+export default PostsPage
