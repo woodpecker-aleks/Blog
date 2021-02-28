@@ -9,6 +9,7 @@ export const Typography = styled.p<TypographyProps>`
   color: ${({ theme }) => theme.textColor};
   font-size: 1rem;
   font-weight: 400;
+  margin-block: ${({ theme }) => theme.spacing}px;
   display: inline-flex;
   align: ${({ align }) => align};
   text-transform: ${({ transform }) => transform};
@@ -40,15 +41,15 @@ export const H3 = styled(Typography)`
 
 export const H4 = styled(Typography)`
   font-size: 1.6rem;
-  font-weight: 500;
+  font-weight: 600;
 `
 
 export const H5 = styled(Typography)`
   font-size: 1.4rem;
-  font-weight: 500;
+  font-weight: 600;
 `
 
 export const H6 = styled(Typography)`
   font-size: 1.2rem;
-  font-weight: 500;
+  font-weight: 600;
 `

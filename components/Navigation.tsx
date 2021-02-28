@@ -7,6 +7,7 @@ import { A } from '@components/Typography'
 const NavList = styled.ul`
   display: flex;
   list-style: none;
+  padding: 0;
 `
 
 const NavItem = styled.li`
